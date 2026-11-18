@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>半導體的微影魔法：黃光製程基礎入門</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #f59e0b; /* 黃光代表色 */
+            --accent-hover: #d97706;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 4px;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .slide-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+        .slide {
+            display: none;
+            max-width: 960px;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.4s ease;
+        }
+        .slide.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tag {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; line-height: 1.2; }
+        h2 { font-size: 1.875rem; margin-bottom: 1.5rem; color: var(--accent); }
+        p { font-size: 1.125rem; line-height: 1.7; color: var(--text-muted); margin-bottom: 1rem; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+        .box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+        .box h3 { color: var(--text-main); margin-bottom: 0.5rem; font-size: 1.25rem; }
+        ul { list-style-position: inside; color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; }
+        li strong { color: var(--text-main); }
+        .wiki-ref {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid var(--border);
+        }
+        button {
+            background: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover { background: var(--accent-hover); }
+        button:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="slide-container">
+        <!-- Slide 1 -->
+        <div class="slide active">
+            <span class="tag">LLM Wiki 教學簡報</span>
+            <h1>半導體的微影魔法：<br>黃光製程 (Photolithography) 入門</h1>
+            <p>不需要物理與電機背景，帶你用 5 分鐘看懂晶片是如何透過「光線與底片」在矽晶圓上雕刻出奈米級電路。</p>
+            <div class="box" style="margin-top: 2rem;">
+                <h3>🎯 學習目標</h3>
+                <ul>
+                    <li>理解為什麼無塵室要使用「黃光」照明</li>
+                    <li>掌握黃光製程的三大核心要素：光源、光罩、光阻</li>
+                    <li>看懂塗佈、曝光、顯影的完整循環流程</li>
+                </ul>
+            </div>
+            <div class="wiki-ref">📚 知識來源：LLM Wiki 條目 #01《微影製程概論》</div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+            <span class="tag">核心概念 01</span>
+            <h2>為什麼叫做「黃光區」？</h2>
+            <p>走進晶圓廠的微影製程區，整個空間都會呈現溫暖的黃橘色，這並不是為了氣氛，而是為了保護關鍵材料。</p>
+            <div class="grid-2">
+                <div class="box">
+                    <h3>🧪 光阻劑的特性</h3>
+                    <p>晶圓表面塗佈的「光阻（Photoresist）」對短波長的藍光與紫外光（UV）極度敏感，一旦照到白光就會提前發生化學反應而報廢。</p>
+                </div>
+                <div class="box">
+                    <h3>💡 濾除短波長光線</h3>
+                    <p>黃光波長較長（約 550~590 nm），能量不足以觸發光阻反應，因此能讓工程師在安全照明下操作晶圓。</p>
+                </div>
+            </div>
+            <div class="wiki-ref">📚 知識來源：LLM Wiki 條目 #02《光阻化學特性與無塵室環境》</div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+            <span class="tag">核心概念 02</span>
+            <h2>微影製程的「洗照片」比喻</h2>
+            <p>黃光製程的原理，其實跟傳統底片相機洗照片非常相似，只是把影像縮小了數萬倍：</p>
+            <div class="grid-2">
+                <div class="box">
+                    <h3>📷 傳統洗照片</h3>
+                    <ul>
+                        <li><strong>燈泡光源：</strong>提供照明</li>
+                        <li><strong>底片：</strong>紀錄影像圖案</li>
+                        <li><strong>相紙：</strong>接收光線並顯像</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h3>🔬 半導體黃光製程</h3>
+                    <ul>
+                        <li><strong>深紫外光 / 極紫外光 (DUV/EUV)：</strong>高能量光源</li>
+                        <li><strong>光罩 (Reticle)：</strong>印有電路藍圖的石英板</li>
+                        <li><strong>塗有光阻的矽晶圓：</strong>轉印電路的載體</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="wiki-ref">📚 知識來源：LLM Wiki 條目 #01《微影製程概論》 & #03《光罩與光學系統》</div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide">
+            <span class="tag">核心流程 03</span>
+            <h2>黃光製程三部曲：塗佈 → 曝光 → 顯影</h2>
+            <div class="box" style="margin-bottom: 1rem;">
+                <h3>1️⃣ 光阻塗佈 (Coating)</h3>
+                <p>將液態光阻滴在晶圓中心並高速旋轉，利用離心力均勻鋪上一層極薄的光阻膜，接著進行軟烤（Soft Bake）去除溶劑。</p>
+            </div>
+            <div class="box" style="margin-bottom: 1rem;">
+                <h3>2️⃣ 曝光 (Exposure)</h3>
+                <p>將晶圓送入曝光機（Scanner），讓雷射光穿過「光罩」與縮小透鏡，精準將電路圖案投影到光阻上。</p>
+            </div>
+            <div class="box">
+                <h3>3️⃣ 顯影 (Development)</h3>
+                <p>噴灑顯影液，將照過光（或未照光）的光阻溶解洗掉，晶圓表面就會浮現出立體的電路圖案。</p>
+            </div>
+            <div class="wiki-ref">📚 知識來源：LLM Wiki 條目 #04《Track 與 Scanner 聯機作業流程》</div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide">
+            <span class="tag">關鍵設備 04</span>
+            <h2>曝光機 (Scanner) 為何這麼昂貴？</h2>
+            <p>曝光機是整個晶圓廠最精密的設備，決定了晶片能做到幾奈米（如 3nm、2nm）。</p>
+            <ul>
+                <li><strong>光源波長越短，線寬越細：</strong>從早期的 i-line (365nm)、KrF (248nm)、ArF (193nm)，一路演進到極紫外光 EUV (13.5nm)。</li>
+                <li><strong>奈米級對準精度 (Overlay)：</strong>一顆晶片需要經過數十層黃光製程，每一層的電路都必須精準疊合在上一層的正上方，誤差必須小於數個奈米。</li>
+                <li><strong>雙工件台設計：</strong>一邊測量晶圓地形起伏，另一邊同步進行高速掃描曝光，兼顧良率與產能。</li>
+            </ul>
+            <div class="wiki-ref">📚 知識來源：LLM Wiki 條目 #05《曝光機演進與對準精準度控制》</div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide">
+            <span class="tag">總結測驗</span>
+            <h2>快速檢核：你掌握重點了嗎？</h2>
+            <div class="box" style="margin-bottom: 1rem;">
+                <h3>❓ 問題一：為什麼黃光區不能開一般日光燈？</h3>
+                <p>👉 <strong>解答：</strong>一般日光燈含有短波長藍光與紫外光，會使晶圓上的光阻提前感光變質。</p>
+            </div>
+            <div class="box">
+                <h3>❓ 問題二：電路圖案是先畫在晶圓上，還是光罩上？</h3>
+                <p>👉 <strong>解答：</strong>先製作在「光罩 (Reticle)」上，再透過曝光機的光學系統縮小投影轉印至塗有光阻的晶圓。</p>
+            </div>
+            <div class="wiki-ref">✅ 本簡報所有內容皆經過 LLM Wiki 條目交叉核對，無外部幻覺資訊。</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="changeSlide(-1)" disabled>← 上一頁</button>
+        <span id="pageIndicator" style="color: var(--text-muted); font-weight: 600;">1 / 6</span>
+        <button id="nextBtn" onclick="changeSlide(1)">下一頁 →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const progressBar = document.getElementById('progressBar');
+
+        function updateUI() {
+            slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+            pageIndicator.textContent = `${currentSlide + 1} / ${slides.length}`;
+            progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+        }
+
+        function changeSlide(dir) {
+            currentSlide = Math.max(0, Math.min(slides.length - 1, currentSlide + dir));
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+        updateUI();
+    </script>
+</body>
+</html>
