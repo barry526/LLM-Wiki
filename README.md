@@ -16,9 +16,9 @@ Wiki 知識庫架構與 Ingest 資料清單（共 5 篇）：
 
 資料 5（#05 曝光機演進與對準精準度控制）： 整理光源波長演進（i-line → KrF → ArF → EUV）與套準精度（Overlay）的重要性。
 
-Wiki 檔案連結： [請貼上你的 GitHub Repo 或 Google Drive 資料夾連結]
+Wiki 檔案連結： https://github.com/barry526/LLM-Wiki/tree/975187b20bdef328fc32284804564f72b13a59e3/LLM%20Wiki
 
 3. 教學 HTML 簡報連結
-簡報線上瀏覽連結： [將上方 HTML 存成 index.html 上傳至你的 GitHub Pages 後貼上連結]
+簡報線上瀏覽連結： https://barry526.github.io/LLM-Wiki/
 
 簡報特色： 採用單頁式互動網頁設計，支援鍵盤左右方向鍵與按鈕切換，上方設有即時閱讀進度條，且每一頁底部皆明確標註對應的 LLM Wiki 條目編號，確保知識可溯源。
